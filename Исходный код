@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+struct Employee {
+    int distanceToHome;
+    int taxiNumber;
+};
+
+int main() {
+    int N;
+    std::cin >> N;
+
+    std::vector<Employee> employees(N);
+    for (int i = 0; i < N; ++i) {
+        std::cin >> employees[i].distanceToHome;
+    }
+
+    for (int i = 0; i < N; ++i) {
+        std::cin >> employees[i].taxiNumber;
+    }
+
+    std::sort(employees.begin(), employees.end(), [](const Employee &a, const Employee &b) {
+        return a.taxiNumber < b.taxiNumber;
+    });
+
+    int totalCost = 0;
+    for (const auto &employee : employees) {
+        totalCost += employee.distanceToHome * employees[0].taxiNumber;
+    }
+
+    std::cout << totalCost << std::endl;
+
+    // Вывод суммы прописью
+    // Оставлено в качестве дополнительной задачи для обучения
+    // Но для более точного и полного решения нужно использовать библиотеки для склонения числительных и валюты
+
+    const char *spellings[] = {"рубль", "рубля", "рублей"};
+    int remainder10 = totalCost % 10;
+    int remainder100 = totalCost % 100;
+    if (remainder10 == 1 && remainder100 != 11) {
+        std::cout << "Оплата: " << totalCost << " " << spellings[0] << std::endl;
+    } else if ((remainder10 >= 2 && remainder10 <= 4) && !(remainder100 >= 12 && remainder100 <= 14)) {
+        std::cout << "Оплата: " << totalCost << " " << spellings[1] << std::endl;
+    } else {
+        std::cout << "Оплата: " << totalCost << " " << spellings[2] << std::endl;
+    }
+
+    return 0;
+}
